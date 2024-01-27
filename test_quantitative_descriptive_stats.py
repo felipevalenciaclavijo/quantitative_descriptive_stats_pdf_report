@@ -140,17 +140,19 @@ def test_col_boxplot(monkeypatch):
     Return: nothing
     """
     df = pd.read_csv("test_datasets/qds_test2.csv")
+    filename = "qds_test2"
     column = "number2"
 
     df2 = pd.read_csv("test_datasets/qds_test.csv")
+    filename2 = "qds_test"
     column2 = "number"
     
     # This will stop the plot.show(), so it won't cause any
     # distractions while performing the test
     monkeypatch.setattr(plt, 'show', lambda: None)
 
-    assert col_boxplot(df, column) == "number2_boxplot.jpg"
-    assert col_boxplot(df2, column2) == "number_boxplot.jpg"
+    assert col_boxplot(df, filename, column) == "qds_test2_number2_boxplot.jpg"
+    assert col_boxplot(df2, filename2, column2) == "qds_test_number_boxplot.jpg"
 
 def test_col_histogram(monkeypatch):
     """Verify that the result of the function
@@ -160,10 +162,12 @@ def test_col_histogram(monkeypatch):
     Return: nothing
     """
     df = pd.read_csv("test_datasets/qds_test2.csv")
+    filename = "qds_test2"
     column = "number2"
     K = bin_size(df, column)
 
     df2 = pd.read_csv("test_datasets/qds_test.csv")
+    filename2 = "qds_test"
     column2 = "number"
     K2 = bin_size(df2, column2)
     
@@ -171,8 +175,8 @@ def test_col_histogram(monkeypatch):
     # distractions while performing the test
     monkeypatch.setattr(plt, 'show', lambda: None)
 
-    assert col_histogram(df, column, K) == "number2_histogram.jpg"
-    assert col_histogram(df2, column2, K2) == "number_histogram.jpg"
+    assert col_histogram(df, filename, column, K) == "qds_test2_number2_histogram.jpg"
+    assert col_histogram(df2, filename2, column2, K2) == "qds_test_number_histogram.jpg"
 
 def test_col_qqplot(monkeypatch):
     """Verify that the result of the function
@@ -182,17 +186,19 @@ def test_col_qqplot(monkeypatch):
     Return: nothing
     """
     df = pd.read_csv("test_datasets/qds_test2.csv")
+    filename = "qds_test2"
     column = "number2"
 
     df2 = pd.read_csv("test_datasets/qds_test.csv")
+    filename2 = "qds_test"
     column2 = "number"
     
     # This will stop the plot.show(), so it won't cause any
     # distractions while performing the test
     monkeypatch.setattr(plt, 'show', lambda: None)
 
-    assert col_qqplot(df, column) == "number2_qqplot.jpg"
-    assert col_qqplot(df2, column2) == "number_qqplot.jpg"
+    assert col_qqplot(df, filename, column) == "qds_test2_number2_qqplot.jpg"
+    assert col_qqplot(df2, filename2, column2) == "qds_test_number_qqplot.jpg"
 
 def test_col_skewness():
     """Verify that the result of the function
@@ -242,6 +248,7 @@ def test_col_skewness():
 # WHICH ALLOWS THE USER THAT RUN THE TEST TO ADD THE INPUT NEEDED
 # SO THE FOLLOWING TEST VERIFY MANY THINGS FROM THAT FUNCTION BUT
 # NOT THE ACTUAL FUNCTION WITH IT'S OUTPUT :(
+
 def test_accept_skew():
     """Verify that the text outcomes
     are the expected ones.

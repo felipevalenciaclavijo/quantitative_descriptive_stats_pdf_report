@@ -35,7 +35,7 @@ def main():
 
     try:
         # Print Instructions:
-        print("Hello Brother Reading.\
+        print("Hello!\
         \nTo be able to use this automated process for quantitative\
         \ndescriptive analysis you need a CSV file that has at least 1\
         \ncolumn made of numbers. For your convenience you can use the\
@@ -53,11 +53,11 @@ def main():
         \nfiles that you'll need for the test.")
         
         # ask the user for tha name of the file
-        filename = input("What is the name of the CSV file?: ")
+        filename = input("What is the name of the CSV file? (DO NOT include '.csv' at the end): ")
         # filename = "qds_test2.csv"
 
         # read the CSV using Pandas
-        df = read_csv("datasets/"+ filename)
+        df = read_csv("datasets/"+ filename + ".csv")
         # print the dataframe to visualize it
         print(df)
 
@@ -75,7 +75,7 @@ def main():
 
         # Create 5 Number Summary with a Box Plot from the selected
         # column and save it as a jpg file
-        col_boxplot(df, column)
+        col_boxplot(df, filename, column)
 
         # Reference of variables:
         conclusion1 = ""
@@ -86,7 +86,7 @@ def main():
         conclusion1 = clt_check(df, column)
 
         # Create a Q-Q Plot from the selected column data
-        col_qqplot(df, column)
+        col_qqplot(df, filename, column)
 
         # if CLT wasn't appropiate, decide normality based on the QQ Plot
         num_observations = len(df[column])
@@ -108,7 +108,7 @@ def main():
         K = bin_size(df, column)
 
         # Create a Histogram from the selected column with bin size
-        col_histogram(df, column, K)
+        col_histogram(df, filename, column, K)
 
         # Call the skewness function to determine the shape of the distribution
         skew, shape = col_skewness(df, column)
@@ -124,7 +124,7 @@ def main():
 
         # Creates and open a pdf report with the nummerical summary, the 3 images generated
         # previously, and the text conclusion for the shape of the distribution
-        pdf_report(column, summary, text, conclusion1, conclusion2, conclusion3)
+        pdf_report(filename, column, summary, text, conclusion1, conclusion2, conclusion3)
 
 
     except (FileNotFoundError, PermissionError) as error:
@@ -206,12 +206,13 @@ def study_choice(study_decision):
         message = "- Because there wasn't enough data to determine sample data normality, we are not going to continue with the study. In other words, this data is insufficient to perform statistical tests."
     return message
 
-def col_boxplot(df, column):
+def col_boxplot(df, filename, column):
     """
     This function creates and saves a boxplot
     Numerical Summaries
     Parameters:
         df: data frame
+        filename: the name of the csv file
         column: the selected column
     returns a boxplot image in jpg
     """
@@ -230,7 +231,7 @@ def col_boxplot(df, column):
           fontstyle='normal')
     # change the name of the tick label from 1 to the name of the column
     plt.xticks([1], [column])
-    boxplot_image = f"{column}_boxplot.jpg"
+    boxplot_image = f"{filename}_{column}_boxplot.jpg"
     plt.savefig("images/" + boxplot_image) # save as jpg
     plt.show()
 
@@ -243,11 +244,12 @@ def bin_size(df, column):
     # print(bin_size)
     return bin_size
 
-def col_histogram(df, column, K):
+def col_histogram(df, filename, column, K):
     """
     This function creates and saves a histogram
     Parameters:
         df: data frame
+        filename: the name of the csv file
         column: the selected column
     returns a histogram image in jpg
     """
@@ -261,7 +263,7 @@ def col_histogram(df, column, K):
     plt.ylabel("frequency")
     plt.xlabel(f"{column}")
 
-    histogram_image = f"{column}_histogram.jpg"
+    histogram_image = f"{filename}_{column}_histogram.jpg"
     plt.savefig("images/" + histogram_image) # save as jpg
     plt.show()
 
@@ -350,11 +352,12 @@ def accept_skew(skew, column, shape):
 
     return text
 
-def col_qqplot(df, column):
+def col_qqplot(df, filename, column):
     """
     This function creates and saves a Q-Q Plot
     Parameters:
         df: data frame
+        filename: the name of the csv file
         column: the selected column
     returns nothing
     """
@@ -375,13 +378,13 @@ def col_qqplot(df, column):
     plt.title("Q-Q Plot")
     plt.ylabel(f"Sample quantiles")
     plt.xlabel("Theoretical quantiles")
-    qqplot_image = f"{column}_qqplot.jpg"
+    qqplot_image = f"{filename}_{column}_qqplot.jpg"
     plt.savefig("images/" + qqplot_image) # save as jpg
     plt.show()
 
     return qqplot_image
 
-def pdf_report(column, summary, dis_shape, conclusion1, conclusion2, conclusion3):
+def pdf_report(filename, column, summary, dis_shape, conclusion1, conclusion2, conclusion3):
     """
     This function creates and saves a PDF report of the analysis and decisions
     Parameters:
@@ -438,13 +441,13 @@ def pdf_report(column, summary, dis_shape, conclusion1, conclusion2, conclusion3
     pdf.set_text_color(56, 58, 89)
     pdf.cell(55, 15, "Nummerical Summary", ln=True, align="R")
     # Insert histogram image:
-    histogram_image = f"images/{column}_histogram.jpg"
+    histogram_image = f"images/{filename}_{column}_histogram.jpg"
     pdf.image(histogram_image, 70, 40, 150)
     # Insert boxplot image:
-    boxplot_image = f"images/{column}_boxplot.jpg"
+    boxplot_image = f"images/{filename}_{column}_boxplot.jpg"
     pdf.image(boxplot_image, 10, 140, 60)
     # Insert q-qplot image:
-    qq_plot_image = f"images/{column}_qqplot.jpg"
+    qq_plot_image = f"images/{filename}_{column}_qqplot.jpg"
     pdf.image(qq_plot_image, 70, 140, 150)
     # Set color of text
     pdf.set_text_color(0, 0, 0)
@@ -484,7 +487,7 @@ def pdf_report(column, summary, dis_shape, conclusion1, conclusion2, conclusion3
 
     pdf.output(f"reports/{column}_qds.pdf", "F")
 
-    path = f"reports/{column}_qds.pdf"
+    path = f"reports/{filename}_{column}_qds.pdf"
     open_pdf_browser = webbrowser.open('file://' + os.path.realpath(path))
 
     return open_pdf_browser
