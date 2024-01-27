@@ -485,7 +485,7 @@ def pdf_report(filename, column, summary, dis_shape, conclusion1, conclusion2, c
     pdf.multi_cell(195, 5, conclusion3, align="L")
 
 
-    pdf.output(f"reports/{column}_qds.pdf", "F")
+    pdf.output(f"reports/{filename}_{column}_qds.pdf", "F")
 
     path = f"reports/{filename}_{column}_qds.pdf"
     open_pdf_browser = webbrowser.open('file://' + os.path.realpath(path))

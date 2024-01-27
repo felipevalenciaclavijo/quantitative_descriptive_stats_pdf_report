@@ -7,6 +7,8 @@ This program helps data analysts understand ONLY the quantitative data they have
 3. Determine the Shape and distribution of the data with Histogram & QQ Plot and helps the analyst make decisions to end up with a final conclusion of the descriptive statistics analysis.
 4. Creates a professional looking PDF report
 
+<img src="example_report.jpg" alt="drawing" width="350"/>
+
 ### Instructions
 
 To use this program, you need to:
